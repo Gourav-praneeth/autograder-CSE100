@@ -1,0 +1,9 @@
+# Ignore compiled files
+*.out
+*.exe
+*.o
+*.class
+
+# Ignore OS/Editor files
+.DS_Store
+.vscode/
