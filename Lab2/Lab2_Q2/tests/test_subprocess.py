@@ -68,6 +68,7 @@ class TestBrownieProgram(unittest.TestCase):
         expected = "A 8 X 12 inch pan can hold 96 small brownies or 24 large brownies."
         self.assertInOutput(expected, output, "Brownie calculation")
 
+    # additional test case
     @weight(0.25)
     def test_BrownieCalculation(self):
         """Test Case 3: Brownie Calculation"""
