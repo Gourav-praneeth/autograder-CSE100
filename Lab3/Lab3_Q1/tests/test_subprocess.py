@@ -62,7 +62,7 @@ class TestIdealWeightProgram(unittest.TestCase):
     @weight(0.25)
     def test_case3_triangle(self):
         """Test Case 3: Triangle"""
-        output = self.run_student_program("3\n5.0")
+        output = self.run_student_program("3\n5.0\n5.0")
         expected = "Area of the Right Triangle is 12.5"
         self.assertInOutput(expected, output, "Test Case 3")
         
