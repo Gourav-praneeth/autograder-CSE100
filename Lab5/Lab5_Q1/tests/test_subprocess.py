@@ -4,7 +4,7 @@ import subprocess
 import re
 
 BINARY = "./Lab5_Question1.out"
-SOURCE = "Lab5_Question1.cpp"   # <-- change to your actual filename if needed
+SOURCE = "Lab5_Question1.cpp"  
 
 class TestBeverageSurvey(unittest.TestCase):
     # ---------- helpers ----------
@@ -43,7 +43,7 @@ class TestBeverageSurvey(unittest.TestCase):
 
     @weight(0.1)
     def test_base_flow_each_once(self):
-        """Test Case 1""" # (0.1): votes 1,2,3,4 then -1 -> each = 1, total = 4
+        """Test Case 1""" # votes 1,2,3,4 then -1 -> each = 1, total = 4
         # 1 (coffee), 2 (tea), 3 (coke), 4 (orange), exit
         output = self.run_program("1\n2\n3\n4\n-1\n")
 
@@ -64,7 +64,7 @@ class TestBeverageSurvey(unittest.TestCase):
 
     @weight(0.1)
     def test_invalid_attempts_then_valid(self):
-        """Test Case 2""" #(0.1): three invalids -> message; then a valid vote; exit
+        """Test Case 2""" # three invalids -> message; then a valid vote; exit
         # Person #1: 3 invalid choices, triggers message; Person #2: valid '2' then exit
         output = self.run_program("9\n0\n7\n2\n-1\n")
 
@@ -87,7 +87,7 @@ class TestBeverageSurvey(unittest.TestCase):
 
     @weight(0.1)
     def test_immediate_exit(self):
-        """Test Case 3""" # (0.1): -1 immediately -> totals all zero
+        """Test Case 3""" # -1 immediately -> totals all zero
         output = self.run_program("-1\n")
 
         self.assertContains("The total number of people surveyed is 0.", output, "Total surveyed")
@@ -99,7 +99,7 @@ class TestBeverageSurvey(unittest.TestCase):
 
     @weight(0.1)
     def test_aggregation_many_votes(self):
-        """Test Case 4""" #(0.1): 1,1,4,3,2,4 then -1 => Coffee=2, Tea=1, Coke=1, Orange=2; total=6
+        """Test Case 4""" # 1,1,4,3,2,4 then -1 => Coffee=2, Tea=1, Coke=1, Orange=2; total=6
         output = self.run_program("1\n1\n4\n3\n2\n4\n-1\n")
 
         self.assertContains("The total number of people surveyed is 6.", output, "Total surveyed")

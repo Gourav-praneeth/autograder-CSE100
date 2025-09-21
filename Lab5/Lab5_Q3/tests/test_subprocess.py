@@ -3,8 +3,8 @@ from gradescope_utils.autograder_utils.decorators import weight
 import subprocess
 import difflib
 
-SOURCE = "Lab5_Question3.cpp"     # student's C++ file name
-BINARY = "Lab5_Question3.out"     # compiled binary name
+SOURCE = "Lab5_Question3.cpp"    
+BINARY = "Lab5_Question3.out"     
 
 class TestSalesArrayProgram(unittest.TestCase):
     def setUp(self):
@@ -54,7 +54,7 @@ class TestSalesArrayProgram(unittest.TestCase):
 
     @weight(0.1)
     def test_all_valid_increasing(self):
-        """Test Case 1: All valid inputs""" # (10,20,...,100): high=100@9, low=10@0, avg=55.00
+        """Test Case 1: All valid inputs""" # (10,20,...,100): high=100 at 9, low=10 0, avg=55.00
         inputs = "\n".join(str(10 * (i + 1)) for i in range(10)) + "\n"
         output = self.run_student_program(inputs)
 
@@ -65,7 +65,7 @@ class TestSalesArrayProgram(unittest.TestCase):
     @weight(0.1)
     def test_single_invalid_then_valid(self):
         """Test Case 2: One invalid""" # (-1) for a store, then a valid value; stats reflect valid numbers
-        # Stores: 5,7,9,(store3: -1 then 30),1,2,3,4,6,8  -> highest=30@3, lowest=1@4, avg=7.50
+        # Stores: 5,7,9,(store3: -1 then 30),1,2,3,4,6,8  -> highest=30 3, lowest=1 4, avg=7.50
         inputs = "5\n7\n9\n-1\n30\n1\n2\n3\n4\n6\n8\n"
         output = self.run_student_program(inputs)
 
@@ -90,7 +90,7 @@ class TestSalesArrayProgram(unittest.TestCase):
 
     @weight(0.1)
     def test_all_zero(self):
-        """Test Case 4: All zeros""" # highest=0@0, lowest=0@0, avg=0.00
+        """Test Case 4: All zeros""" 
         inputs = ("0\n" * 10)
         output = self.run_student_program(inputs)
 

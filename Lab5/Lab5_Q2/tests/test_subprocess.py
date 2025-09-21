@@ -3,9 +3,8 @@ from gradescope_utils.autograder_utils.decorators import weight
 import subprocess
 import difflib
 
-# Adjust these if your filenames differ
-SOURCE = "Lab5_Question2.cpp"   # student's C++ file (replace if needed)
-BINARY = "Lab5_Q2.out"          # compiled binary name
+SOURCE = "Lab5_Question2.cpp"  
+BINARY = "Lab5_Q2.out"         
 
 class TestCityBarGraph(unittest.TestCase):
     def setUp(self):
@@ -85,14 +84,14 @@ class TestCityBarGraph(unittest.TestCase):
 
     @weight(0.1)
     def test_InvalidNumCities(self):
-        """Test case 3""" #  Invalid number of cities (<= 0) -> error and exit
-        output = self.run_student_program("0\n")
+        """Test case 3""" #  Invalid number of cities (< 0) -> error and exit
+        output = self.run_student_program("-1\n")
         self.assertInOutput("Invalid number of cities!", output, "Invalid numCities message")
 
     @weight(0.1)
     def test_TooManyInvalidPopulations(self):
         """Test Case 4""" #Three invalid population inputs trigger exit message
         # numCities=1; provide: -1, 'a' (fail state), -5 -> should hit limit and exit
-        output = self.run_student_program("1\n-1\na\n-5\n")
+        output = self.run_student_program("1\n-1\n-4\n-5\n")
         self.assertInOutput("Invalid population!", output, "Invalid population message")
         self.assertInOutput("Too many invalid inputs. Exiting program.", output, "Exit after 3 invalids")

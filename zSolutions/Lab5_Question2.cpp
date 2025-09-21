@@ -15,9 +15,6 @@ int main() {
         return 0;
     }
 
-    cout << "\nCity    Population Bar Graph\n";
-    cout << "---------------------------------\n";
-
     for (int i = 0; i < numCities; i++) {
         while (true) {
             cout << "Enter the population for city " << i+1 << ": ";
@@ -38,7 +35,10 @@ int main() {
             }
         }
 
-      }	  
+      }
+      
+    cout << "\nCity    Population Bar Graph\n";
+    cout << "---------------------------------\n";
 
 	for (int i = 0; i < numCities; i++) {  
 		// Round up to nearest 1000
