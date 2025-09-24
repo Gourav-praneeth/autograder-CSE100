@@ -91,7 +91,7 @@ class TestSnowReport(unittest.TestCase):
     def test_non_consecutive_dates_requires_retry(self):
         """Test Case 4: Non-consecutive date rejected; then corrected."""
         # Month: May (31 days). First entry 10 1.0, second entry mistakenly 12 1.0 (invalid),
-        # then correct it with 11 1.0, then continue 12..15.
+        # then correct it with 11 1.0, then continue 12..16.
         input_data = (
             "May\n"
             "10 1.00\n"
@@ -101,11 +101,12 @@ class TestSnowReport(unittest.TestCase):
             "13 1.00\n"
             "14 1.00\n"
             "15 1.00\n"
+            "16 1.00\n"
         )
         out = self.run_program(input_data)
 
         self.assertContains("Dates must be strictly consecutive!", out, "Non-consecutive rejection")
-        self.assertContains("Snow report May 10 - 15", out, "Header range after correction")
+        self.assertContains("Snow report May 10 - 16", out, "Header range after correction")
 
     @weight(0.2)
     def test_date_larger_than_days(self):
