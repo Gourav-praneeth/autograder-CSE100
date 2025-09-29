@@ -82,7 +82,7 @@ class TestGradeCalculator(unittest.TestCase):
     def test_three_invalid_attempts_exit(self):
         """Test Case 5: Invalid Attempts Check"""
         # Three invalid attempts for Test 1 → exit with message, no final report
-        out = self.run_program("-1\nabc\n105\n")
+        out = self.run_program("-1\n-12.8\n105\n")
         self.assertContains("Invalid input! Score must be between 0 and 100.", out, "Invalid messages present")
         self.assertContains("Too many invalid attempts!", out, "Too many attempts message")
         self.assertNotContains("Final Score:", out, "No report printed after exit")
