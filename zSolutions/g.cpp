@@ -1,236 +1,267 @@
-// #include <iostream>
-// #include <string>
-// #include <iomanip>
-// using namespace std;
+/******************************************************************************
 
-// // Function declarations
-// double calculateAverage(double arr[], int size);
-// double findMax(double arr[], int size);
-// double findMin(double arr[], int size);
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
 
-// // This function returns the number of days in a month using if-else
-// int getDaysInMonth(string month) {
-//     if (month == "January" || month == "March" || month == "May" ||
-//         month == "July" || month == "August" || month == "October" || month == "December") {
-//         return 31;
-//     } else if (month == "April" || month == "June" || month == "September" || month == "November") {
-//         return 30;
-//     } else if (month == "February") {
-//         return 28; // Not handling leap years for simplicity
-//     } else {
-//         return -1; // Invalid month
-//     }
-// }
+*******************************************************************************/
 
-// int main() {
-//     const int NUM_DAYS = 7;
-//     int days[NUM_DAYS];
-//     double distances[NUM_DAYS];
-//     string month;
-
-//     cout << "Enter month name: ";
-//     getline(cin, month);
-
-//     int maxDay = getDaysInMonth(month);
-//     if (maxDay == -1) {
-//         cout << "Invalid month entered. Program exiting." << endl;
-//         return 1;
-//     }
-
-//     for (int i = 0; i < NUM_DAYS; i++) {
-//         cout << "\nEntry " << i + 1 << ":" << endl;
-
-//         int day;
-//         cout << "Enter day of the month (1-" << maxDay << "): ";
-//         cin >> day;
-
-//         while (day < 1 || day > maxDay) {
-//             cout << "Invalid day. Please try again: ";
-//             cin >> day;
-//         }
-
-//         double distance;
-//         cout << "Enter commute distance (miles): ";
-//         cin >> distance;
-
-//         while (distance < 0) {
-//             cout << "Distance cannot be negative. Enter again: ";
-//             cin >> distance;
-//         }
-
-//         days[i] = day;
-//         distances[i] = distance;
-//     }
-
-//     // Print Report
-//     cout << fixed << setprecision(1);
-//     cout << "\n=== Commute Report for " << month << " ===" << endl;
-//     cout << "Day    Distance (miles)" << endl;
-//     cout << "------------------------" << endl;
-
-//     for (int i = 0; i < NUM_DAYS; i++) {
-//         cout << days[i] << "      " << distances[i] << endl;
-//     }
-
-//     cout << "\nLongest commute: " << findMax(distances, NUM_DAYS) << " miles" << endl;
-//     cout << "Shortest commute: " << findMin(distances, NUM_DAYS) << " miles" << endl;
-//     cout << "Average commute: " << calculateAverage(distances, NUM_DAYS) << " miles" << endl;
-
-//     return 0;
-// }
-
-// // Function to calculate average
-// double calculateAverage(double arr[], int size) {
-//     double sum = 0;
-//     for (int i = 0; i < size; i++) {
-//         sum += arr[i];
-//     }
-//     return sum / size;
-// }
-
-// // Function to find maximum
-// double findMax(double arr[], int size) {
-//     double max = arr[0];
-//     for (int i = 1; i < size; i++) {
-//         if (arr[i] > max) {
-//             max = arr[i];
-//         }
-//     }
-//     return max;
-// }
-
-// // Function to find minimum
-// double findMin(double arr[], int size) {
-//     double min = arr[0];
-//     for (int i = 1; i < size; i++) {
-//         if (arr[i] < min) {
-//             min = arr[i];
-//         }
-//     }
-//     return min;
-// }
-
-#include<iostream>
-#include<iomanip>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
+#include <string>
+#include <vector>
 using namespace std;
 
+int rounds;                           // global variables
+string weapon[] = {"Rock", "Paper", "Scissors"};// static weapon array
+vector<int> roundtracker;                       // dynamic round tracker array
+bool con = true;                                // exit status
 
-// Program to develop a system that generates bills for a cellular phone company.
+void startGame(int&);                           // beginning message, get rounds
+bool run();                                     // main game
+void finalScore();                              // calc//print final score
+void exit();                                    // exit message
 
-int main()
-{
-    // declar variables 
-    char customerT;
-    int minuteused;
-    string customerP;
-    double costbase;
-    double stage1R;
-    double stage2R;
-    double totalMinutes;
-    double stage1cost;
-    double stage2cost;
-    double totalcost;
-    double monthbase;
-    char moreBills;
-    int invalidcustomerAttempts =0;
-    int invalidminuteAttempts =0;
-    const double regular_basepay = 29.99;
-    const double regular_stage1r = 0.55;
-    const double regular_stage2r = 0.88;
-    const double business_basepay = 99.99;
-    const double business_stage1r = 0.99;
-    const double business_stage2r = 0.88;
-    // Display program name
-    cout << "=============================================" << endl;
-    cout <<  "\tPhone Bill Generation Software\t"<< endl;
-    cout << "=============================================" << endl;
-   
-    // get customer input for customer type
-do {
-    // Validate customer type input
-    while(true) {
-    cout << "Please Enter the Customer Type (R for regular, B for business):";
-    cin >> customerT;
+int main(){
+    startGame(rounds);
+    while(run())                                //loop until quit status
+        continue;
+    exit();
+    return 0;
+}
 
-     if (customerT == 'R' || customerT == 'r' || customerT == 'B'|| customerT == 'b') {
-        break;
-     }
-     else {
-        cout << "Invalid customer type! Please enter R, r for regular and B, b for business customers"<<endl;
-        invalidcustomerAttempts++;
-        
-        // limit excess
-        if (invalidcustomerAttempts >=3) {
-        cout << "Too many invalid attempts, existing the program"<<endl;
-        return 1;
+void startGame(int& rounds){
+    int tryc = 0;                               // input try count
+    string in;
+    
+    
+    while(tryc<3){
+        if(tryc == 2)
+            cout<<"One attempt left!"<<endl;
+        cout<<"Enter the number of rounds you would like to play: ";
+        cin>>in;
+        cout<<endl;
+        if(in[0]=='q'){
+            con = false;
+            break;
+        }
+        else if(in.size()<10){
+            bool kill = false;
+            for(int i = 0; i<in.size();i++){
+                if(!isdigit(in[i])){
+                kill = true;
+                break;
+                }
+            }
+            if(!kill){
+                rounds = stoi(in);
+                if(rounds<=0){
+                    cout<<"Number must be larger than 0."<<endl;
+                    tryc++;
+                }
+                else break;
+            }
+            else{
+                tryc++;
+                cout<<"Please enter a whole, non-negative number that is less than 1,000,000."<<endl;
+            }
+        }
+        else{
+            tryc++;
+            cout<<"Entry too big. Please enter a whole, non-negative number that is less than 1,000,000."<<endl;
         }
     }
-}
- // get customer phone number
-    cout << "Please Enter the Customer Phone Number:";
-    cin >> customerP;
-
-while (true) {
-    // get customer input for minuites used
-    cout << "Enter the phone usage in minutes:";
-    cin >> minuteused;
-      // Validate customer minutes used
-    if (minuteused >= 0) {
-        break;
-    }
-    else {
-        cout << "Minutes used should be grater than zero"<<endl;
-        invalidminuteAttempts++;  
-    // limit excess
-       if (invalidcustomerAttempts >= 3) {
-        cout << "Too many invalid attempts, existing the program"<<endl;
-        return 1;
-       }
-}
-}    
-    // display customer's input
-    cout << "\tPhone Bill for : "<<customerP<< endl;
-    cout << "\t============================"<< endl;
-    cout <<"Total Minutes Used:"<<minuteused<<endl;
-    
-    // Calculate bill for business customer
-    if (customerT == 'R'|| customerT == 'r') {
-        monthbase = regular_basepay;
-        stage1R = regular_stage1r;
-        stage2R = regular_stage2r;
-    }
-    else {
-        monthbase = business_basepay;
-        stage1R = business_stage1r;
-        stage2R = business_stage2r;
-    }
-    // Calculate cost
-    if (minuteused<=200) {
-        stage1cost = 0.0;
-        stage2cost =0.0;
-    }   
-    else if (minuteused <=450) {
-        stage1cost =(minuteused-200)*stage1R;
-        stage2cost = 0.0;
-    }
-    else {
-        stage1cost =250*stage1R;
-        stage2cost = (minuteused-450)*stage2R;
-    }
-    totalcost= monthbase+stage1cost+stage2cost;           
-    //    Output the bill
-    cout <<"Monthly Base Payment:"<<monthbase<<endl;
-    cout<<"Stage 1 cost: $"<<stage1cost<<endl;
-    cout<<"Stage 2 cost: $"<<stage2cost<<endl;
-    cout<<"--------------------------"<<endl;
-    cout<<"Total cost : $ "<<totalcost<<endl;
-
-    // Ask for more bill
-    cout<<"More Bills? [Y/N]: ";
-    cin >> moreBills;
-}  while (moreBills == 'Y' || moreBills== 'y');
-
-
-return 0;
+    if (tryc>=3)                                // quit status after 3 failed trys
+        con = false;
 }
 
+bool run(){
+    int tryc = 0;
+    srand(time(0));
+    string wi;                                  // weapon input buffer
+    int uw;                                     // user weapon index
+    int cw = rand() % 3;                        // computer weapon index
+    char yes;
+
+    if(con){                                    // check for start input failure
+        while(tryc<3){
+            if(tryc == 2)
+                cout<<"One attempt left!"<<endl;
+            cout<<"\nEnter your weapon (Rock, Paper, or Scissors): ";
+            cin>>wi;
+            cout<<endl;
+            if(wi[0]=='q'){
+                con = false;
+                break;
+            }
+            for(int i = 0; i < wi.size(); i++){ // case standardize
+                if(isalpha(wi[i]))
+                    wi[i] = tolower(wi[i]);
+            }
+            if(wi!="rock" && wi!="paper" && wi!="scissors" && wi!="r" && wi!="p" && wi!="s" && wi!="1" && wi!="2" && wi!="3"){ // input filtering
+                tryc++;
+                cout<<"Please enter Rock, Paper, or Scissors"<<endl;
+                continue;
+            }
+            if (wi == "rock" || wi =="r" || wi=="1")                   // user weapon index assignment
+                uw = 0;
+            if (wi == "paper" || wi =="p" || wi=="2")
+                uw = 1;
+            if (wi == "scissors" || wi =="s" || wi=="3")
+                uw = 2;
+            cout<<"Human picks: "<<weapon[uw]<<endl;
+            cout<<"Computer picks: "<<weapon[cw]<<endl;
+            if (uw == cw){                      // Draw handling. Tracker update
+                cout<<"its a draw!"<<endl;
+                roundtracker.push_back(0);
+            }
+            else{
+                switch (uw){                    // Win/Loss handling. Tracker update
+                    case 0:
+                    if(cw == 1){
+                        cout<<"Paper wraps Rock, The Computer Wins!"<<endl;
+                        roundtracker.push_back(-1);
+                    }
+                    else{
+                        cout<<"Rock breaks Scissors, The Human Wins!"<<endl;
+                        roundtracker.push_back(1);
+                    }
+                    break;
+
+                    case 1:
+                    if(cw == 2){
+                        cout<<"Scissors cut Paper, The Computer Wins!"<<endl;
+                        roundtracker.push_back(-1);
+                    }
+                    else{
+                        cout<<"Paper wraps Rock, The Human Wins!"<<endl;
+                        roundtracker.push_back(1);
+                    }
+                    break;
+                    
+                    case 2:
+                    if(cw == 0){
+                        cout<<"Rock breaks Scissors, The Computer Wins!"<<endl;
+                        roundtracker.push_back(-1);
+                    }
+                    else{
+                        cout<<"Scissors cut Paper, The Human Wins!"<<endl;
+                        roundtracker.push_back(1);
+                    }
+                    break;
+                }
+            }
+
+            if(roundtracker.size()==rounds){    // round check
+                cout<<"Keep going? (Y for yes, else quit): ";// continue check
+                cin>>yes;
+                cout<<endl;
+                if(yes != 'y' && yes != 'Y'){
+                    finalScore();
+                    con = false;
+                    break;
+                }
+                cout<<"\nAdd more rounds? (Y for yes, else quit): ";// add more rounds?
+                cin>>yes;
+                cout<<endl;
+                if(yes=='y' ||yes=='Y'){
+                    int trycc = 0;
+                    string in;
+                    int addrounds;
+                    while(trycc<3){
+                        if(trycc == 2)
+                            cout<<"One attempt left!"<<endl;
+                        cout<<"Enter the number of extra rounds you would like to play: ";
+                        cin>>in;
+                        cout<<endl;
+                        if(in[0]=='q'){
+                            con = false;
+                            break;
+                        }
+                        else if(in.size()<10){
+                            bool kill = false;
+                            for(int i = 0; i<in.size();i++){
+                                if(!isdigit(in[i])){
+                                kill = true;
+                                break;
+                                }
+                            }
+                            if(!kill){
+                                addrounds = stoi(in);
+                                if(addrounds<=0){
+                                    cout<<"Number must be larger than 0."<<endl;
+                                    trycc++;
+                                }
+                                else {
+                                    rounds +=addrounds;
+                                    break;
+                                }
+                            }
+                            else{
+                                trycc++;
+                                cout<<"Please enter a whole, non-negative number that is less than 1,000,000."<<endl;
+                            }
+                        }
+                        else{
+                            trycc++;
+                            cout<<"Entry too big. Please enter a whole, non-negative number that is less than 1,000,000."<<endl;
+                        }
+
+                    }
+                    if (trycc>=3)
+                        con = false;
+                }
+                else {
+                    con = false;
+                    finalScore();
+                }
+            }
+            else{
+                cout<<"Keep going? (Y for yes, else quit): ";// continue check
+                cin>>yes;
+                cout<<endl;
+                if(yes != 'y' && yes != 'Y'){
+                    finalScore();
+                    con = false;
+                }
+            }
+            break;
+        }
+        if (tryc>=3)
+            con = false;
+    }
+    return con;
+}
+
+void finalScore(){
+    int wins = 0;
+    int lose = 0;
+    int draw = 0;
+    int total = 0;
+    for(int i = 0; i < roundtracker.size(); i++){
+        total += roundtracker[i];               // for quick overall results calculation
+        if(roundtracker[i]>0)
+            wins++;
+        else if(roundtracker[i]<0)
+            lose++;
+        else
+            draw++;
+    }
+    cout<<"\n----Final Results----"<<endl;
+    cout<<"Human Wins:     "<<wins<<endl;
+    cout<<"Computer Wins:  "<<lose<<endl;
+    cout<<"Draws:          "<<draw<<endl;
+    cout<<"\nOverall Winner: ";
+    if(total>0)
+        cout<<"Human!"<<endl;
+    else if(total<0)
+        cout<<"Computer!"<<endl;
+    else
+        cout<<"Its a Draw!"<<endl;
+}
+
+void exit(){
+    cout<<"\nSimulation has ended.\nThank you for playing!!!"<<endl;
+}

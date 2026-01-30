@@ -9,7 +9,7 @@ int main(){
     // 2. Get user input
     cout << "Enter the length of the baking pan (in inches): ";
     cin >> length;
-    cout << "Enter the width off the baking pan (in inches): ";
+    cout << "Enter the width of the baking pan (in inches): ";
     cin >> width;
 
     // 3. Compute surface area
@@ -17,10 +17,10 @@ int main(){
 
     // 4. Compute number of brownies
     smallBrownies = surfaceArea;  // 1x1 brownies
-    largeBrownies = surfaceArea / 4;  // 2x2 brownies
+    largeBrownies = surfaceArea/2 * surfaceArea/2;  // 2x2 brownies
 
     // 5. Display results
-    cout << "A " << length << " X " << width << " inch pan can hold " << smallBrownies << " small brownies or " << largeBrownies << " large brownies." << endl;
+    cout << "A " << length << " x " << width << " inch pan can hold " << smallBrownies << " small brownies or " << largeBrownies << " large brownies." << endl;
 
     return 0;
 }

@@ -6,12 +6,12 @@ class TestStudentInfo(unittest.TestCase):
     def setUp(self):
         pass
 
-    @weight(0.9)
-    def test_Compile(self):
+    @weight(0.7)
+    def test_00_Compile(self):
         """Clean Compile: Program compiles without errors"""
 
         # Attempt to compile the student's code using make or g++
-        compile_process = subprocess.Popen(["g++", "-o", "test1.out", "Lab1_Q1.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        compile_process = subprocess.Popen(["g++", "-o", "test1.out", "Lab1_Question1.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         _, compile_errors = compile_process.communicate()
         compile_process.kill()
 
@@ -27,23 +27,23 @@ class TestStudentInfo(unittest.TestCase):
         test.terminate()
         return output
 
-    @weight(0.2)
+    @weight(0.1)
     def test_Name(self):
         """Check if Name is displayed correctly"""
         output = self.run_student_program()
-        expected_name = "John, Doe"
+        expected_name = "Name: John, Doe"
         self.assertIn(expected_name, output, msg=f"Expected: {expected_name}\nFound: {output}")
 
-    @weight(0.2)
+    @weight(0.1)
     def test_Age(self):
         """Check if Age is displayed correctly"""
         output = self.run_student_program()
-        expected_age = "27"
+        expected_age = "Age: 27"
         self.assertIn(expected_age, output, msg=f"Expected: {expected_age}\nFound: {output}")
 
-    @weight(0.2)
+    @weight(0.1)
     def test_AcademicLevel(self):
         """Check if Academic Level is displayed correctly"""
         output = self.run_student_program()
-        expected_level = "Freshman"
+        expected_level = "Academic Level: Freshman"
         self.assertIn(expected_level, output, msg=f"Expected: {expected_level}\nFound: {output}")

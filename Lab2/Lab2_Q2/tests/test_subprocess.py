@@ -8,7 +8,7 @@ class TestBrownieProgram(unittest.TestCase):
         pass
 
     @weight(0.2)
-    def test_Compile(self):
+    def test_00_Compile(self):
         """Clean Compile: Program compiles without errors"""
         compile_process = subprocess.Popen(
             ["g++", "-o", "Lab2_Question2.out", "Lab2_Question2.cpp"],
@@ -47,14 +47,14 @@ class TestBrownieProgram(unittest.TestCase):
             )
 
     # ====== Test Cases ======
-    @weight(0.125)
+    @weight(0.15)
     def test_LengthPrompt(self):
         """Test Case 1: Length Prompt"""
         output = self.run_student_program("8\n12\n")
         expected = "Enter the length of the baking pan (in inches): "
         self.assertInOutput(expected, output, "Length prompt")
 
-    @weight(0.125)
+    @weight(0.15)
     def test_WidthPrompt(self):
         """Test Case 2: Width Prompt"""
         output = self.run_student_program("8\n12\n")
@@ -65,13 +65,13 @@ class TestBrownieProgram(unittest.TestCase):
     def test_BrownieCalculation(self):
         """Test Case 3: Brownie Calculation"""
         output = self.run_student_program("8\n12\n")
-        expected = "A 8 X 12 inch pan can hold 96 small brownies or 24 large brownies."
+        expected = "A 8 x 12 inch pan can hold 96 small brownies or 24 large brownies."
         self.assertInOutput(expected, output, "Brownie calculation")
 
     # additional test case
     @weight(0.25)
     def test_BrownieCalculation(self):
-        """Test Case 3: Brownie Calculation"""
+        """Test Case 4: Edge Case"""
         output = self.run_student_program("7\n11\n")
-        expected = "A 7 X 11 inch pan can hold 77 small brownies or 19.25 large brownies."
-        self.assertInOutput(expected, output, "Brownie calculation")
+        expected = "A 7 X 11 inch pan can hold 77 small brownies or 15 large brownies."
+        self.assertInOutput(expected, output, "Edge Case")

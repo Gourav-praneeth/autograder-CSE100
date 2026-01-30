@@ -8,10 +8,10 @@ class TestIdealWeightProgram(unittest.TestCase):
         pass
 
     @weight(0.2)
-    def test_Compile(self):
+    def test_00_Compile(self):
         """Clean Compile: Program compiles without errors"""
         compile_process = subprocess.Popen(
-            ["g++", "-o", "Lab2_Q1.out", "Lab2_Question1.cpp"],
+            ["g++", "-o", "Lab2_Question1.out", "Lab2_Question1.cpp"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
@@ -24,7 +24,7 @@ class TestIdealWeightProgram(unittest.TestCase):
         )
         compile_process.terminate()
 
-    def run_student_program(self, input_data):
+    def run_student_program(self, input_data="5 3"):
         """Helper method to run the compiled program and capture output lines"""
         test = subprocess.Popen(
             ["./Lab2_Question1.out"],
@@ -50,6 +50,7 @@ class TestIdealWeightProgram(unittest.TestCase):
     def test_WelcomeMessage(self):
         """Test Case 1"""
         output = self.run_student_program()
+        # Solution has tab character at the start
         self.assertInOutput("Welcome to Ideal Weight Calculation Program", output, "Welcome message")
 
     @weight(0.25)
@@ -59,14 +60,14 @@ class TestIdealWeightProgram(unittest.TestCase):
         expected = "Please enter your height, feet followed by inches (eg; 5 3): "
         self.assertInOutput(expected, output, "Input prompt")
 
-    @weight(0.125)
+    @weight(0.15)
     def test_MaleIdealWeight(self):
         """Test Case 3A: Male"""
         output = self.run_student_program("5 3")
         expected = "If you are a male, your ideal weight should be 124 pounds."
         self.assertInOutput(expected, output, "Male ideal weight")
 
-    @weight(0.125)
+    @weight(0.15)
     def test_FemaleIdealWeight(self):
         """Test Case 3B: Female"""
         output = self.run_student_program("5 3")

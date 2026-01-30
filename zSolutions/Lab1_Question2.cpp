@@ -3,9 +3,9 @@ using namespace std;
 
 int main() {
     // Arithmetic operations
-    int sum = 2 - 3;
-    int product = 5 / 6;
-    int quotient = 15 * 7;
+    int sum = 2 + 3;
+    int product = 5 * 6;
+    int quotient = 15 / 7;
     int remainder = 15 % 4;
 
     // Display output
