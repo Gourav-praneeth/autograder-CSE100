@@ -3,29 +3,29 @@ from gradescope_utils.autograder_utils.decorators import weight
 import subprocess
 import difflib
 
-class TestPhoneBillProgram(unittest.TestCase):
+class TestIdealWeightProgram(unittest.TestCase):
     def setUp(self):
         pass
 
-    @weight(0.2)
+    @weight(0.1)
     def test_Compile(self):
         """Clean Compile: Program compiles without errors"""
         compile_process = subprocess.Popen(
-            ["g++", "-o", "Lab4_Q1.out", "Lab4_Question1.cpp"],
+            ["g++", "-o", "Lab4_Question1.out", "Lab4_Question1.cpp"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         _, compile_errors = compile_process.communicate()
         compile_process.kill()
-        
+
         self.assertEqual(
             compile_errors.decode("utf-8").strip(), "",
-            msg="Compilation failed. Errors:\n" + compile_errors.decode("utf-8")
+            msg="Compilation failed. Please check your C++ syntax.\nErrors:\n" + compile_errors.decode("utf-8")
         )
         compile_process.terminate()
 
-    def run_student_program(self, input_data):
-        """Run student program and return full output as string"""
+    def run_student_program(self, input_data="5 3"):
+        """Helper method to run the compiled program and capture output lines"""
         test = subprocess.Popen(
             ["./Lab4_Question1.out"],
             stdin=subprocess.PIPE,
@@ -35,65 +35,41 @@ class TestPhoneBillProgram(unittest.TestCase):
         output, _ = test.communicate(input=input_data.encode("utf-8"))
         test.kill()
         test.terminate()
-        return output.decode("utf-8").strip()
+        return output.decode("utf-8").splitlines()
 
     def assertInOutput(self, expected, output, section=""):
-        """Check if expected string is in output, else show closest match"""
+        """Helper to provide clearer error messages with suggestions"""
         if expected not in output:
-            closest = difflib.get_close_matches(expected, output.split(), n=1)
-            wrong = closest[0] if closest else output
-            self.fail(
-                f"{section} check failed.\nExpected: '{expected}'\nFound:    '{wrong}'"
-            )
+            closest = difflib.get_close_matches(expected, output, n=1)
+            suggestion = f"\nFound: '{closest[0]}'" if closest else ""
+            self.fail(f"{section} check failed.\nExpected: '{expected}'{suggestion}")
 
     # ====== Test Cases ======
+    @weight(0.2)
+    def test_case1_square(self):
+        """Test Case 1: Square"""
+        output = self.run_student_program("1\n4.5")
+        expected = "Area of the Square is 20.25"
+        self.assertInOutput(expected, output, "Test Case 1")
 
-    @weight(0.05)
-    def test_Header(self):
-        """Test Case 1: Program Header"""
-        output = self.run_student_program("R\n408-897-8978\n100\nN\n")
-        self.assertInOutput("Phone Bill Generation Software", output, "Program header")
+    @weight(0.2)
+    def test_case2_circle(self):
+        """Test Case 2: Circle"""
+        output = self.run_student_program("2\n3.0")
+        expected = "Area of the Circle is 28.2743"
+        self.assertInOutput(expected, output, "Test Case 2")
+        
+    @weight(0.2)
+    def test_case3_triangle(self):
+        """Test Case 3: Triangle"""
+        output = self.run_student_program("3\n5.0\n5.0")
+        expected = "Area of the Right Triangle is 12.5"
+        self.assertInOutput(expected, output, "Test Case 3")
+        
+    @weight(0.2)
+    def test_case4_invalid(self):
+        """Test Case 4: Invalid Choice"""
+        output = self.run_student_program("0")
+        expected = "Invalid Choice of Object!"
+        self.assertInOutput(expected, output, "Test Case 4")
 
-    @weight(0.05)
-    def test_RegularWithinLimit(self):
-        """Test Case 2: Regular customer under 200 min"""
-        output = self.run_student_program("R\n668-897-8578\n150\nN\n")
-        self.assertInOutput("Total Cost: $29.99", output, "Regular under 200 min bill")
-
-    @weight(0.05)
-    def test_RegularStage1(self):
-        """Test Case 3: Regular customer Stage1 overage"""
-        output = self.run_student_program("R\n408-897-8978\n300\nN\n")
-        # Extra = 100 * 0.55 = 55.0 -> 29.99+55.0 = 84.99
-        self.assertInOutput("Total Cost: $84.99", output, "Regular Stage1 bill")
-
-    @weight(0.05)
-    def test_BusinessWithinLimit(self):
-        """Test Case 4: Business customer under 600 min"""
-        output = self.run_student_program("B\n+14808977988\n476\nN\n")
-        self.assertInOutput("Total Cost: $99.99", output, "Business under 600 min bill")
-
-    @weight(0.05)
-    def test_BusinessStage1(self):
-        """Test Case 5: Business customer Stage1 overage"""
-        output = self.run_student_program("B\n+14808977988\n650\nN\n")
-        # Extra = 50*0.45 = 22.5 + base 99.99 = 122.49
-        self.assertInOutput("Total Cost: $122.49", output, "Business Stage1 bill")
-
-    @weight(0.05)
-    def test_InvalidType(self):
-        """Test Case 6: Invalid customer type (3 attempts exit)"""
-        output = self.run_student_program("X\nY\nZ\n")
-        self.assertInOutput("Invalid customer type!", output, "Invalid type handling")
-
-    @weight(0.05)
-    def test_InvalidMinutes(self):
-        """Test Case 7: Invalid minutes (3 attempts exit)"""
-        output = self.run_student_program("R\n123456\n-5\n-10\n-20\n")
-        self.assertInOutput("Invalid phone usage!", output, "Invalid minutes handling")
-
-    @weight(0.05)
-    def test_ExitMessage(self):
-        """Test Case 8: Program exit message"""
-        output = self.run_student_program("R\n6692088345\n476\nN\n")
-        self.assertInOutput("Exiting the program.........", output, "Exit message")
