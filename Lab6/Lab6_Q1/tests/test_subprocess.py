@@ -47,8 +47,8 @@ class TestBeverageSurvey(unittest.TestCase):
         # Must not use vector
         self.assertNotIn("vector", source_lower,
                          "You must use arrays, not vectors (std::vector is not allowed).")
-        # Must use arrays: C-style int name[N] or int name[] or name[index]
-        has_array_decl = bool(re.search(r"\w+\s*\[\s*(\d+)?\s*\]", source))
+        # Must use arrays: C-style name[N], name[], or name[identifier] (e.g. count[cSIZE])
+        has_array_decl = bool(re.search(r"\w+\s*\[\s*[^\]]*\s*\]", source))
         self.assertTrue(has_array_decl,
                         "You must use arrays (e.g. int arr[4] or int count[]) in your solution.")
 
