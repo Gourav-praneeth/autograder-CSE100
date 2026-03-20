@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+exampleFile=$(find / -xdev -name Lab8_Question2.cpp)
+mFile=$(find / -xdev -name makefile)
+
+cp $exampleFile /autograder/source/Lab8_Question2.cpp
+cp $mFile /autograder/source/makefile 2>/dev/null || true
+
+cd /autograder/source
+
+g++ -std=gnu++17 -O2 -Wall Lab8_Question2.cpp -o Lab8_Question2.out
+
+python3 run_tests.py > /autograder/results/results.json

@@ -1,0 +1,37 @@
+Test Case 1 – Compilation
+
+Test Case 2 – Valid Input
+
+Month: March
+Dates: 10–16
+Snowfall: 1, 2, 3, 2, 1, 0, 4
+Expected: Snow report March 10 - 16
+
+Test Case 3 – Invalid Month
+
+Inputs: Marth, Januari, Boo
+Expected: Invalid month! each time, then Exceeded the number of Invalid Attempts.
+
+Test Case 4 – Negative Snowfall
+
+Month: April
+Input: Day 20 → -1 (invalid), then 20 → 2.25, days 21–26
+Expected: Invalid snowfall! and Snow report April 20 - 26.
+
+Test Case 5 – Non-Consecutive Dates
+
+Month: May
+Input: 10 → 1.0, then 12 → 1.0 (invalid), then 11 → 1.0, days 12–16
+Expected: Dates must be strictly consecutive! and Snow report May 10 - 16.
+
+Test Case 6 – Date Exceeds Month Length
+
+Month: April (30 days)
+Input: 23 → 0.50, 31 → 0.50 (invalid), then 24–29
+Expected: Date is larger than number of days in the month! and Snow report April 23 - 29.
+
+Test Case 7 – Range Exceeds Month
+
+Month: February (28 days)
+Input: 25 → 0.30 (invalid), then 21 → 0.30, days 22–27
+Expected: Range exceeds the days in the month! and Snow report February 21 - 27.
