@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Find the files to tested ( searches within folders )
+exampleFile=$(find / -xdev -name Lab9_Question1.cpp 2>/dev/null | head -1)
+
+# Copies the files into the Autograder's CWD
+cp "$exampleFile" /autograder/source/Lab9_Question1.cpp
+
+cd /autograder/source
+
+g++ -Wall -std=gnu++17 Lab9_Question1.cpp -o Lab9_Question1.out
+
+python3 run_tests.py > /autograder/results/results.json
