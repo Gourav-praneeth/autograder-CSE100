@@ -1,5 +1,7 @@
 #include <iostream>
 #include <iomanip>
+#include <string>
+#include <stdexcept>
 using namespace std;
 
 class Tips {
@@ -9,80 +11,118 @@ private:
 public:
     Tips(double rate = 0.085) : taxRate(rate) {}
 
-    double computeTip(double totalBill, double tipRate) const {
-        double mealCost = totalBill / (1.0 + taxRate);
-        return mealCost * tipRate;
+    double computeAmountWithoutTax(double totalBill) const {
+        return totalBill / (1.0 + taxRate);
     }
+
+    double computeTip(double totalBill, double tipRate) const {
+        double amountWithoutTax = computeAmountWithoutTax(totalBill);
+        return tipRate * amountWithoutTax;
+    }
+
+    double getTaxRate() const { return taxRate; }
 };
 
 int main() {
-    Tips calculator;
-    int invalidAttempts = 0;
-    const int MAX_ATTEMPTS = 3;
-
     cout << fixed << setprecision(2);
+    cout << "===============================================\n";
     cout << "\t\tGratuity Calculator\n";
-    cout << "\t\t-------------------\n";
+    cout << "===============================================\n";
 
-    char again = 'y';
+    double taxRate = 0.0;
+    int taxAttempts = 0;
 
-    while ((again == 'y' || again == 'Y') && invalidAttempts < MAX_ATTEMPTS) {
-        double totalBill;
-        double tipRate;
+    while (taxAttempts < 3) {
+        cout << "Enter the tax rate as a positive real number: ";
+        if (!(cin >> taxRate)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid input. Attempt " << taxAttempts + 1 << " of 3. Please enter a number.\n";
+            taxAttempts++;
+            continue;
+        }
+        break;
+    }
 
-        // BILL INPUT LOOP
-        while (true) {
-            cout << "Enter the total bill amount (including tax): ";
-            if (cin >> totalBill && totalBill >= 0) {
+    if (taxAttempts >= 3) {
+        cout << "Too many invalid attempts!\n";
+        return 0;
+    }
+
+    double effectiveTaxRate = (taxRate <= 0.0) ? 0.085 : taxRate;
+    Tips calculator(effectiveTaxRate);
+
+    while (true) {
+        double totalBill = 0.0;
+        int billAttempts = 0;
+
+        while (billAttempts < 3) {
+            cout << "Enter the total bill amount: ";
+            string input;
+            cin >> input;
+
+            try {
+                size_t idx;
+                totalBill = stod(input, &idx);
+                if (idx != input.size() || totalBill <= 0.0) {
+                    throw invalid_argument("Invalid");
+                }
                 break;
-            } else {
-                cout << "Invalid bill amount! Attempt " << invalidAttempts + 1 << " of 3.\n";
+            } catch (...) {
+                cout << "Invalid input. Attempt " << billAttempts + 1 << " of 3. Value must be positive.\n";
+                billAttempts++;
+            }
+        }
+
+        if (billAttempts >= 3) {
+            cout << "Too many invalid attempts!\n";
+            return 0;
+        }
+
+        double tipRate = 0.0;
+        int tipAttempts = 0;
+
+        while (tipAttempts < 3) {
+            cout << "Enter the tip rate: ";
+            if (!(cin >> tipRate) || tipRate <= 0.0) {
                 cin.clear();
                 cin.ignore(1000, '\n');
-                invalidAttempts++;
-                if (invalidAttempts >= MAX_ATTEMPTS) break;
+                cout << "Invalid input. Attempt " << tipAttempts + 1 << " of 3. Value must be positive.\n";
+                tipAttempts++;
+                continue;
             }
+            break;
         }
-        if (invalidAttempts >= MAX_ATTEMPTS) break;
 
-        // TIP INPUT LOOP
-        while (true) {
-            cout << "Enter the tip rate (e.g., 0.15 for 15%): ";
-            if (cin >> tipRate && tipRate >= 0) {
+        if (tipAttempts >= 3) {
+            cout << "Too many invalid attempts!\n";
+            return 0;
+        }
+
+        double tipAmount = calculator.computeTip(totalBill, tipRate);
+
+        cout << "\nTotal Bill Amount: $" << totalBill << "\n";
+        cout << "Tax Rate: " << calculator.getTaxRate() * 100 << "%\n";
+        cout << "Tip Rate: " << tipRate * 100 << "%\n";
+        cout << "Tip Amount: $" << tipAmount << "\n";
+
+        char cont = ' ';
+        int contAttempts = 0;
+        while (contAttempts < 3) {
+            cout << "\nDo you want to continue (y/n)?";
+            cin >> cont;
+            if (cont == 'y' || cont == 'Y' || cont == 'n' || cont == 'N') {
                 break;
-            } else {
-                cout << "Invalid tip rate! Attempt " << invalidAttempts + 1 << " of 3.\n";
-                cin.clear();
-                cin.ignore(1000, '\n');
-                invalidAttempts++;
-                if (invalidAttempts >= MAX_ATTEMPTS) break;
             }
-        }
-        if (invalidAttempts >= MAX_ATTEMPTS) break;
-
-        // CALCULATION
-        double tip = calculator.computeTip(totalBill, tipRate);
-        cout << "Calculated tip: $" << tip << "\n";
-
-        // YES/NO LOOP
-        while (true) {
-            cout << "\nDo you want to enter another bill? (y/n): ";
-            cin >> again;
-
-            if (again == 'y' || again == 'Y' || again == 'n' || again == 'N') {
-                break;
-            } else {
-                cout << "Invalid choice.\n";
-                invalidAttempts++;
-                if (invalidAttempts >= MAX_ATTEMPTS) break;
-            }
+            cout << "Invalid choice. Attempt " << contAttempts + 1 << " of 3.\n";
+            contAttempts++;
         }
 
+        if (cont == 'n' || cont == 'N') {
+            break;
+        }
         cout << "\n";
     }
 
-    if (invalidAttempts >= MAX_ATTEMPTS) {
-        cout << "Too many invalid attempts!\n";
-    }
     return 0;
 }
